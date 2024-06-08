@@ -51,3 +51,8 @@ pip install -r requirements.txt
 # Please activate venv before executing it.
 streamlit run server.py
 ```
+
+## ToDo
+
+- Add Introduce Page
+- Add Chenge Table
