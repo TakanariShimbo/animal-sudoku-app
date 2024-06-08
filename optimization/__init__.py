@@ -1,2 +1,3 @@
+from .table import Table
 from .consts import Consts
-from .main import OrtoolOptimizer
+from .main import Optimizer

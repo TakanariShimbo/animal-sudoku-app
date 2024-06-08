@@ -1,14 +1,9 @@
-import pandas as pd
+import numpy as np
 from ortools.sat.python import cp_model
 
+from .table import Table
 from .consts import Consts
 from .variables import Variables
-
-
-pd.set_option("display.width", None)
-pd.set_option("display.max_rows", None)
-pd.set_option("display.max_columns", None)
-pd.set_option("display.unicode.east_asian_width", True)
 
 
 class SolutionCallback(cp_model.CpSolverSolutionCallback):
@@ -19,7 +14,7 @@ class SolutionCallback(cp_model.CpSolverSolutionCallback):
         self._variables = variables
         self._solution_count = 0
         self._solution_limit = solution_limit
-        self._result_numbers_df: pd.DataFrame | None = None
+        self._result_table: Table | None = None
 
     def get_assigned_number(self, h_position: int, v_position: int) -> int:
         for number in self._consts.numbers:
@@ -30,13 +25,13 @@ class SolutionCallback(cp_model.CpSolverSolutionCallback):
         raise Exception(f"Zero Assigned Number at {h_position} {v_position}")
 
     def save_result(self) -> None:
-        result_numbers_df = pd.DataFrame(None, index=self._consts.v_positions, columns=self._consts.h_positions)
-        for h_position in self._consts.h_positions:
-            for v_position in self._consts.v_positions:
+        result_number_array = np.zeros([9, 9], dtype=int)
+        for h_idx, h_position in enumerate(self._consts.h_positions):
+            for v_idx, v_position in enumerate(self._consts.v_positions):
                 number = self.get_assigned_number(h_position=h_position, v_position=v_position)
-                result_numbers_df.loc[v_position, h_position] = number
+                result_number_array[v_idx, h_idx] = number
 
-        self._result_numbers_df = result_numbers_df
+        self._result_table = Table(number_array=result_number_array)
 
     def on_solution_callback(self) -> None:
         self._solution_count += 1
@@ -50,5 +45,5 @@ class SolutionCallback(cp_model.CpSolverSolutionCallback):
         return self._solution_count
 
     @property
-    def result_numbers_df(self) -> pd.DataFrame | None:
-        return self._result_numbers_df
+    def result_table(self) -> Table | None:
+        return self._result_table

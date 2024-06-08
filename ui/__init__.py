@@ -1,1 +1,1 @@
-from .sstates import RerenderSState, DisplayedNumbersDfSState
+from .sstates import RerenderSState, TableSState

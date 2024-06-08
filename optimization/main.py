@@ -1,13 +1,13 @@
-import pandas as pd
 from ortools.sat.python import cp_model
 
+from .table import Table
 from .consts import Consts
 from .variables import Variables
 from .constraints import add_constraints
 from .solution_callback import SolutionCallback
 
 
-class OrtoolOptimizer:
+class Optimizer:
     def __init__(self, consts: Consts) -> None:
         # モデルの作成
         model = cp_model.CpModel()
@@ -21,7 +21,7 @@ class OrtoolOptimizer:
         self._solver = solver
         self._consts = consts
 
-    def run(self) -> pd.DataFrame | None:
+    def run(self) -> Table | None:
         # モデルに変数を追加
         variables = Variables(model=self._model, consts=self._consts)
 
@@ -36,7 +36,7 @@ class OrtoolOptimizer:
 
         if not (status == cp_model.OPTIMAL or status == cp_model.FEASIBLE):
             return None
-        return solution_callback.result_numbers_df
+        return solution_callback.result_table
 
     def _print_statistics(self) -> None:
         print("\nStatistics")
