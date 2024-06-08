@@ -38,7 +38,6 @@ class SolutionCallback(cp_model.CpSolverSolutionCallback):
         self.save_result()
 
         if self._solution_count >= self._solution_limit:
-            print(f"Stop search after {self._solution_limit} solutions")
             self.stop_search()
 
     def solution_count(self) -> int:
