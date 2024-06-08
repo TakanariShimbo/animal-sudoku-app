@@ -24,6 +24,13 @@ docker build -t takanarishimbo/animal-sudoku-app:v1.0.0 .
 
 - conda or miniconda is required
 
+### Deploy
+
+```bash
+# Please activate venv before executing it.
+streamlit run server.py
+```
+
 ### Venv
 
 - create venv
@@ -43,13 +50,6 @@ conda activate animal_sudoku_app
 ```bash
 # Please activate venv before executing it.
 pip install -r requirements.txt
-```
-
-### Deploy
-
-```bash
-# Please activate venv before executing it.
-streamlit run server.py
 ```
 
 ## ToDo
