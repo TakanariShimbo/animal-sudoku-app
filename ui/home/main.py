@@ -52,7 +52,7 @@ def show_home() -> bool:
         to_string_df=edited_string_df,
     )
 
-    is_filled = TableSState.get().is_filled
+    is_all_cells_filled = TableSState.get().is_filled
 
     #######################################################
     #                      ACTION                         #
@@ -92,7 +92,7 @@ def show_home() -> bool:
         RerenderSState.call()
         return True
 
-    if is_filled:
+    if is_all_cells_filled:
         st.info("遊んでくれてありがとう🐧　またね👋")
         st.balloons()
 
