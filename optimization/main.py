@@ -32,7 +32,7 @@ class Optimizer:
         solution_limit = 1
         solution_callback = SolutionCallback(consts=self._consts, variables=variables, solution_limit=solution_limit)
         status = self._solver.solve(model=self._model, solution_callback=solution_callback)
-        self._print_statistics()
+        # self._print_statistics()
 
         if not (status == cp_model.OPTIMAL or status == cp_model.FEASIBLE):
             return None
