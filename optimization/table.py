@@ -12,6 +12,7 @@ CONVERT_STRING_TO_NUMBER = np.vectorize(STRING_TO_NUMBER_DICT.get)
 
 NUMBER_INDEXES = list(range(1, 10))
 NUMBER_COLUMNS = list(range(1, 10))
+
 STRING_INDEXES = [f"行{n}" for n in NUMBER_INDEXES]
 STRING_COLUMNS = [f"列{n}" for n in NUMBER_COLUMNS]
 
