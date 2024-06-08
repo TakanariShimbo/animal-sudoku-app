@@ -3,9 +3,10 @@ import time
 import numpy as np
 import streamlit as st
 
-from optimization import Optimizer, Consts, Table
+from optimization import Table
 from .sstates import RerenderSState, TableSState
-from .check_cell_change import CellChangedMode, check_cell_changed_mode
+from .cell_change_mode import CellChangedMode, check_cell_changed_mode
+from .optimizer import check_table_can_solve, solve_table
 
 
 def show_home() -> bool:
@@ -57,7 +58,7 @@ def show_home() -> bool:
     #                      ACTION                         #
     #######################################################
     if cell_changed_mode == CellChangedMode.NOT_EMPTY:
-        st.toast("すでに埋まっているマスは変えられないよ🐧")
+        st.toast("埋まっているマスは変えられないよ🐧")
         time.sleep(1.0)
         RerenderSState.call()
         return True
@@ -70,10 +71,8 @@ def show_home() -> bool:
 
     if cell_changed_mode == CellChangedMode.COLLECTLY:
         edited_table = Table.from_string_df(string_df=edited_string_df)
-        consts = Consts(fixed_table=edited_table)
-        optimizer = Optimizer(consts=consts)
-        result_table = optimizer.run()
-        if result_table == None:
+        can_solve = check_table_can_solve(table=edited_table)
+        if not can_solve:
             st.toast("その数字は入れられないよ🐧")
             time.sleep(1.0)
         else:
@@ -88,16 +87,13 @@ def show_home() -> bool:
 
     if is_solve_pushed:
         current_table = TableSState.get()
-        consts = Consts(fixed_table=current_table)
-        optimizer = Optimizer(consts=consts)
-        result_table = optimizer.run()
-        assert type(result_table) == Table
+        result_table = solve_table(table=current_table)
         TableSState.set(table=result_table)
         RerenderSState.call()
         return True
 
     if is_filled:
-        st.info("遊んでくれてありがとう　またね🐧")
+        st.info("遊んでくれてありがとう🐧　またね👋")
         st.balloons()
 
     return False
