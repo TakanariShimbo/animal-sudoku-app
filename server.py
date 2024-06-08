@@ -1,22 +1,11 @@
+import time
+
 import numpy as np
 import pandas as pd
 import streamlit as st
 
 from optimization import Optimizer, Consts, Table
-from ui import RerenderSState, TableSState
-
-
-def check_is_changed_correctly(from_string_df: pd.DataFrame, to_string_df: pd.DataFrame) -> bool:
-    for number in list(range(1, 10)):
-        comparison = (from_string_df == "") & (to_string_df == f"{number}")
-        if comparison.any().any():
-            return True
-    return False
-
-
-def check_is_changed_incorrectly(from_string_df: pd.DataFrame, to_string_df: pd.DataFrame) -> bool:
-    comparison = from_string_df != to_string_df
-    return comparison.any().any()
+from ui import RerenderSState, TableSState, check_cell_changed_mode, CellChangedMode
 
 
 def check_is_filled_all(displayed_numbers_df: pd.DataFrame) -> bool:
@@ -28,7 +17,10 @@ st.set_page_config(
     page_icon="🐧",
 )
 
+style = "<style>h3 {text-align: center;}</style>"
+st.markdown(style, unsafe_allow_html=True)
 st.write("### 🐧アニマル数独アプリ")
+
 
 init_number_array = np.array(
     [
@@ -50,37 +42,50 @@ TableSState.init(table=init_table)
 edited_string_df = st.data_editor(
     key=RerenderSState.get(),
     data=TableSState.get().string_df,
+    use_container_width=True,
 )
 
+_, left, _, right, _ = st.columns([1, 3, 1, 3, 1])
+with left:
+    is_restart_pushed = st.button(label="最初から🐔", use_container_width=True)
+with right:
+    is_solve_pushed = st.button(label="回答を見る🐶", use_container_width=True)
 
-if check_is_changed_correctly(
+
+cell_changed_mode = check_cell_changed_mode(
     from_string_df=TableSState.get().string_df,
     to_string_df=edited_string_df,
-):
-    edited_table = Table.from_string_df(string_df=edited_string_df)
-    TableSState.set(table=edited_table)
-    RerenderSState.call()
-    st.rerun()
-
-
-if check_is_changed_incorrectly(
-    from_string_df=TableSState.get().string_df,
-    to_string_df=edited_string_df,
-):
-    RerenderSState.call()
-    st.rerun()
-
+)
 
 is_filled = TableSState.get().is_filled
 
 
-left, cencter, right = st.columns([1, 1, 1])
-with left:
-    is_restart_pushed = st.button(label="最初から🐔")
-with cencter:
-    is_solve_pushed = st.button(label="回答を見る🐶")
-with right:
-    is_check_pushed = st.button(label="順調か確認🐗")
+if cell_changed_mode == CellChangedMode.NOT_EMPTY:
+    st.toast("すでに埋まっているマスは変えられないよ🐧")
+    time.sleep(1.0)
+    RerenderSState.call()
+    st.rerun()
+
+
+if cell_changed_mode == CellChangedMode.NOT_NUMBER:
+    st.toast("1から9の数字を入力してね🐧")
+    time.sleep(1.0)
+    RerenderSState.call()
+    st.rerun()
+
+
+if cell_changed_mode == CellChangedMode.COLLECTLY:
+    edited_table = Table.from_string_df(string_df=edited_string_df)
+    consts = Consts(fixed_table=edited_table)
+    optimizer = Optimizer(consts=consts)
+    result_table = optimizer.run()
+    if result_table == None:
+        st.toast("その数字は入れられないよ🐧")
+        time.sleep(1.0)
+    else:
+        TableSState.set(table=edited_table)
+    RerenderSState.call()
+    st.rerun()
 
 
 if is_restart_pushed:
@@ -89,44 +94,17 @@ if is_restart_pushed:
     st.rerun()
 
 
-if is_check_pushed and not is_filled:
-    current_table = TableSState.get()
-    consts = Consts(fixed_table=current_table)
-    optimizer = Optimizer(consts=consts)
-    result_table = optimizer.run()
-    if result_table:
-        st.info("順調だよ、その調子🐧")
-    else:
-        st.error("どこか間違ってるみたい🐧")
-
-
 if is_solve_pushed:
     current_table = TableSState.get()
     consts = Consts(fixed_table=current_table)
     optimizer = Optimizer(consts=consts)
     result_table = optimizer.run()
-    if result_table:
-        TableSState.set(table=result_table)
-        RerenderSState.call()
-        st.rerun()
-
-    consts = Consts(fixed_table=init_table)
-    optimizer = Optimizer(consts=consts)
-    result_table = optimizer.run()
-    if result_table:
-        TableSState.set(table=result_table)
-        RerenderSState.call()
-        st.rerun()
-
-    st.warning("ごめんね、サーバーで問題が発生しているみたい🐧")
+    assert type(result_table) == Table
+    TableSState.set(table=result_table)
+    RerenderSState.call()
+    st.rerun()
 
 
 if is_filled:
-    consts = Consts(fixed_table=TableSState.get())
-    optimizer = Optimizer(consts=consts)
-    result_table = optimizer.run()
-    if result_table:
-        st.info("遊んでくれてありがとう　またね🐧")
-        st.balloons()
-    else:
-        st.error("どこか間違っているみたい🐧")
+    st.info("遊んでくれてありがとう　またね🐧")
+    st.balloons()
