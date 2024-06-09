@@ -24,19 +24,7 @@ class Table:
         assert number_array.min() >= 0
         assert number_array.max() <= 9
 
-        self._string_df = pd.DataFrame(
-            data=CONVERT_NUMBER_TO_STRING(number_array),
-            index=STRING_INDEXES,
-            columns=STRING_COLUMNS,
-            dtype=str,
-        )
-        self._number_df = pd.DataFrame(
-            data=number_array,
-            index=NUMBER_INDEXES,
-            columns=NUMBER_COLUMNS,
-            dtype=int,
-        )
-        self._is_filled = number_array.min() > 0
+        self._number_array = number_array
 
     @classmethod
     def from_number_df(cls, number_df: pd.DataFrame) -> "Table":
@@ -50,12 +38,31 @@ class Table:
 
     @property
     def string_df(self) -> pd.DataFrame:
-        return self._string_df
+        return pd.DataFrame(
+            data=CONVERT_NUMBER_TO_STRING(self._number_array),
+            index=STRING_INDEXES,
+            columns=STRING_COLUMNS,
+            dtype=str,
+        )
 
     @property
     def number_df(self) -> pd.DataFrame:
-        return self._number_df
+        return pd.DataFrame(
+            data=self._number_array,
+            index=NUMBER_INDEXES,
+            columns=NUMBER_COLUMNS,
+            dtype=int,
+        )
 
     @property
     def is_filled(self) -> bool:
-        return self._is_filled
+        return self._number_array.min() > 0
+
+    def convert_some_cells_to_zero(self, n_cells_to_zero: int, seed: int) -> None:
+        np.random.seed(seed)
+
+        idxes = np.arange(self._number_array.size)
+        np.random.shuffle(idxes)
+        target_idxes = idxes[:n_cells_to_zero]
+
+        np.put(self._number_array, target_idxes, 0)
