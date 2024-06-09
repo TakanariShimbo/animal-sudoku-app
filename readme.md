@@ -1,8 +1,8 @@
-## About
+## 🐧About
 
 Animal Sudoku App
 
-## Docker
+## 🐋Docker
 
 - docker is required
 
@@ -20,7 +20,7 @@ docker compose up -d
 docker build -t takanarishimbo/animal-sudoku-app:v1.0.0 .
 ```
 
-## Conda
+## 🐍Conda
 
 - conda or miniconda is required
 
@@ -51,7 +51,3 @@ conda activate animal_sudoku_app
 # Please activate venv before executing it.
 pip install -r requirements.txt
 ```
-
-## ToDo
-
-- Add Introduce Page
