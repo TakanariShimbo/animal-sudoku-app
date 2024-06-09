@@ -39,8 +39,8 @@ class Optimizer:
             return None
         return solution_callback.result_table
 
-    def _print_statistics(self) -> None:
-        print("\nStatistics")
-        print(f"  - conflicts      : {self._solver.num_conflicts}")
-        print(f"  - branches       : {self._solver.num_branches}")
-        print(f"  - wall time      : {self._solver.wall_time} s")
+    # def _print_statistics(self) -> None:
+    #     print("\nStatistics")
+    #     print(f"  - conflicts      : {self._solver.num_conflicts}")
+    #     print(f"  - branches       : {self._solver.num_branches}")
+    #     print(f"  - wall time      : {self._solver.wall_time} s")
