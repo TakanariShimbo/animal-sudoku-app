@@ -30,9 +30,10 @@ class Optimizer:
 
         solution_callback = SolutionCallback(consts=self._consts, variables=variables)
         status = self._solver.solve(model=self._model, solution_callback=solution_callback)
+        has_solution = status == cp_model.OPTIMAL or status == cp_model.FEASIBLE
         # self._print_statistics()
 
-        if not (status == cp_model.OPTIMAL or status == cp_model.FEASIBLE):
+        if not has_solution:
             return None
         return solution_callback.result_table
 
