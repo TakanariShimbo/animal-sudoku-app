@@ -14,8 +14,3 @@ class TableSState:
     @staticmethod
     def set(table: Table) -> None:
         st.session_state[TABLE_SSTATE] = table
-
-    @classmethod
-    def init(cls, table: Table) -> None:
-        if not TABLE_SSTATE in st.session_state:
-            cls.set(table=table)

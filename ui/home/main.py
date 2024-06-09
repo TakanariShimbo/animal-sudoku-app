@@ -1,12 +1,11 @@
 import time
 
-import numpy as np
 import streamlit as st
 
 from optimization import Table
-from .sstates import RerenderSState, TableSState
+from .sstates import RerenderSState, TableSState, InitTableSState
 from .cell_change_mode import CellChangedMode, check_cell_changed_mode
-from .optimizer import check_table_can_solve, solve_table
+from .optimizer import check_table_can_solve, solve_table, prepare_init_table
 
 
 def show_home() -> bool:
@@ -18,22 +17,10 @@ def show_home() -> bool:
     st.markdown(style, unsafe_allow_html=True)
     st.write("### 🐧アニマル数独アプリ")
 
-    init_number_array = np.array(
-        [
-            [0, 8, 0, 4, 0, 0, 0, 9, 0],
-            [0, 6, 0, 0, 0, 0, 1, 3, 0],
-            [0, 0, 1, 7, 0, 0, 0, 0, 0],
-            [0, 0, 6, 0, 0, 0, 5, 0, 0],
-            [7, 0, 5, 0, 9, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 8, 0, 0, 3],
-            [5, 2, 0, 3, 0, 0, 0, 7, 6],
-            [0, 7, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 4, 0, 0, 0, 0],
-        ],
-        dtype=int,
-    )
-    init_table = Table(number_array=init_number_array)
-    TableSState.init(table=init_table)
+    if not InitTableSState.is_initialized_already():
+        init_table = prepare_init_table(n_empty_cells=40)
+        InitTableSState.set(table=init_table)
+        TableSState.set(table=init_table)
 
     edited_string_df = st.data_editor(
         key=RerenderSState.get(),
@@ -41,11 +28,13 @@ def show_home() -> bool:
         use_container_width=True,
     )
 
-    _, left, _, right, _ = st.columns([1, 3, 1, 3, 1])
+    _, left, _, center, _, right, _ = st.columns([1, 3, 1, 3, 1, 3, 1])
     with left:
-        is_restart_pushed = st.button(label="最初から🐔", use_container_width=True)
+        is_rerun_pushed = st.button(label="問題を変える🐔", use_container_width=True)
+    with center:
+        is_restart_pushed = st.button(label="最初から🐶", use_container_width=True)
     with right:
-        is_solve_pushed = st.button(label="回答を見る🐶", use_container_width=True)
+        is_solve_pushed = st.button(label="回答を見る🐗", use_container_width=True)
 
     cell_changed_mode = check_cell_changed_mode(
         from_string_df=TableSState.get().string_df,
@@ -80,8 +69,13 @@ def show_home() -> bool:
         RerenderSState.call()
         return True
 
+    if is_rerun_pushed:
+        InitTableSState.clear()
+        RerenderSState.call()
+        return True
+
     if is_restart_pushed:
-        TableSState.set(table=init_table)
+        TableSState.set(table=InitTableSState.get())
         RerenderSState.call()
         return True
 

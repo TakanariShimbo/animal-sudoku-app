@@ -1,3 +1,5 @@
+import random
+
 import numpy as np
 
 from optimization import Optimizer, Consts, Table
@@ -21,7 +23,8 @@ def solve_table(table: Table) -> Table:
     return result_table
 
 
-def prepare_init_table(n_empty_cells: int, seed: int) -> Table:
+def prepare_init_table(n_empty_cells: int) -> Table:
+    seed = random.randint(1, 10000)
     empty_number_array = np.zeros((9, 9), dtype=int)
     empty_table = Table(number_array=empty_number_array)
     consts = Consts(fixed_table=empty_table)
