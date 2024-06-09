@@ -1,2 +1,8 @@
 __pycache__
 .env
+.git
+.dockerignore
+Dockerfile
+docker-compose.yaml
+readme.md
+test_optimization.py

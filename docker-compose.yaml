@@ -4,7 +4,7 @@ services:
   animal-sudoku-app-service:
     container_name: animal-sudoku-app-container
 
-    image: takanarishimbo/animal-sudoku-app:v2.1.0
+    image: takanarishimbo/animal-sudoku-app:v2.1.1
 
     ports:
       - "${SERVER_PORT}:8501"
