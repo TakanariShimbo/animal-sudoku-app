@@ -24,13 +24,10 @@ class Optimizer:
         self._consts = consts
 
     def run(self) -> Table | None:
-        # モデルに変数を追加
         variables = Variables(model=self._model, consts=self._consts)
 
-        # モデルに拘束を追加
         add_constraints(model=self._model, consts=self._consts, variables=variables)
 
-        # モデルをソルバーで解く
         solution_callback = SolutionCallback(consts=self._consts, variables=variables)
         status = self._solver.solve(model=self._model, solution_callback=solution_callback)
         # self._print_statistics()
