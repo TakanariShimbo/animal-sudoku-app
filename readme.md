@@ -55,4 +55,3 @@ pip install -r requirements.txt
 ## ToDo
 
 - Add Introduce Page
-- Add Chenge Table
