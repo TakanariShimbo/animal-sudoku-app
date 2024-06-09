@@ -36,7 +36,7 @@ def show_home() -> bool:
     with chagne_table_popver:
         with st.form(key="chagne_table_form", border=False):
             n_empty_cells = st.number_input(label="空白なマスの数", min_value=1, value=40, max_value=81, step=1)
-            is_change_table_pushed = st.form_submit_button(label="🐸変えるよ")
+            is_change_table_pushed = st.form_submit_button(label="変更")
 
     edited_string_df = st.data_editor(
         key=RerenderSState.get(),
