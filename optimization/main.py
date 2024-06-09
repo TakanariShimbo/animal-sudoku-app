@@ -31,8 +31,7 @@ class Optimizer:
         add_constraints(model=self._model, consts=self._consts, variables=variables)
 
         # モデルをソルバーで解く
-        solution_limit = 1
-        solution_callback = SolutionCallback(consts=self._consts, variables=variables, solution_limit=solution_limit)
+        solution_callback = SolutionCallback(consts=self._consts, variables=variables)
         status = self._solver.solve(model=self._model, solution_callback=solution_callback)
         # self._print_statistics()
 
