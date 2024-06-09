@@ -3,7 +3,7 @@ import time
 import streamlit as st
 
 from optimization import Table
-from .sstates import RerenderSState, TableSState, InitTableSState
+from .sstates import RerenderSState, TableSState, InitTableSState, NEmptySState
 from .cell_change_mode import CellChangedMode, check_cell_changed_mode
 from .optimizer import check_table_can_solve, solve_table, prepare_init_table
 from .images import RuleImages
@@ -13,8 +13,11 @@ def show_home() -> bool:
     #######################################################
     #                       INIT                          #
     #######################################################
+    if not NEmptySState.is_initialized_already():
+        NEmptySState.set(n_empty_cells=40)
+
     if not InitTableSState.is_initialized_already():
-        init_table = prepare_init_table(n_empty_cells=40)
+        init_table = prepare_init_table(n_empty_cells=NEmptySState.get())
         InitTableSState.set(table=init_table)
         TableSState.set(table=init_table)
 
@@ -32,7 +35,8 @@ def show_home() -> bool:
 
     with chagne_table_popver:
         with st.form(key="chagne_table_form", border=False):
-            is_change_table_pushed = st.form_submit_button(label="🐸変える")
+            n_empty_cells = st.number_input(label="空白なマスの数", min_value=1, value=40, max_value=81, step=1)
+            is_change_table_pushed = st.form_submit_button(label="🐸変えるよ")
 
     edited_string_df = st.data_editor(
         key=RerenderSState.get(),
@@ -94,6 +98,7 @@ def show_home() -> bool:
         return True
 
     if is_change_table_pushed:
+        NEmptySState.set(n_empty_cells=int(n_empty_cells))
         InitTableSState.clear()
         RerenderSState.call()
         return True
@@ -111,7 +116,7 @@ def show_home() -> bool:
         return True
 
     if is_all_cells_filled:
-        st.info("🐧遊んでくれてありがとう👋")
+        st.info("🐧遊んでくれてありがとう")
         st.balloons()
 
     return False
