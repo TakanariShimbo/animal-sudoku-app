@@ -3,8 +3,6 @@ import pandas as pd
 
 
 class Table:
-    DISPLAYED_STRING_LIST = ["", "🐭1", "🐮2", "🐯3", "🐰4", "🐉5", "🐍6", "🐎7", "🐏8", "🐵9"]
-
     def __init__(self, number_array: np.ndarray) -> None:
         assert number_array.shape == (9, 9)
         assert np.issubdtype(number_array.dtype, np.integer)
@@ -24,6 +22,18 @@ class Table:
         return cls(number_array=number_array)
 
     @staticmethod
+    def _get_string_list() -> list[str]:
+        return ["", "🐭1", "🐮2", "🐯3", "🐰4", "🐉5", "🐍6", "🐎7", "🐏8", "🐵9"]
+
+    @classmethod
+    def _get_number_to_string_dict(cls) -> dict[int, str]:
+        return {key: val for key, val in enumerate(cls._get_string_list())}
+
+    @classmethod
+    def _get_string_to_number_dict(cls) -> dict[str, int]:
+        return {val: key for key, val in enumerate(cls._get_string_list())} | {f"{key}": key for key, val in enumerate(cls._get_string_list())}
+
+    @staticmethod
     def _get_indexes_and_columns_for_number() -> tuple[list[int], list[int]]:
         indexes = list(range(1, 10))
         columns = list(range(1, 10))
@@ -38,14 +48,12 @@ class Table:
 
     @classmethod
     def _convert_array_to_string(cls, number_array: np.ndarray) -> np.ndarray:
-        number_to_string_dict = {key: val for key, val in enumerate(cls.DISPLAYED_STRING_LIST)}
-        to_sring_converter = np.vectorize(number_to_string_dict.get)
+        to_sring_converter = np.vectorize(cls._get_number_to_string_dict().get)
         return to_sring_converter(number_array)
 
     @classmethod
     def _convert_array_to_number(cls, string_array: np.ndarray) -> np.ndarray:
-        string_to_number_dict = {val: key for key, val in enumerate(cls.DISPLAYED_STRING_LIST)} | {f"{key}": key for key, val in enumerate(cls.DISPLAYED_STRING_LIST)}
-        to_number_converter = np.vectorize(string_to_number_dict.get)
+        to_number_converter = np.vectorize(cls._get_string_to_number_dict().get)
         return to_number_converter(string_array)
 
     def get_string_df(self, column_header: str, index_header: str) -> pd.DataFrame:
