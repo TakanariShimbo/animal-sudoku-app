@@ -80,9 +80,9 @@ class Texts:
     @property
     def explanation_contents(self) -> str:
         if self.is_jp:
-            return "🐔縦一列・横一列・3x3グリッド に同じ動物（数字）が入らないようにしてね"
+            return "🐧縦一列・横一列・3x3グリッド に同じ動物（数字）が入らないようにしてね"
         elif self.is_en:
-            return "🐔Make sure the same animal (number) does not appear in a single column, row, or 3x3 grid"
+            return "🐧Make sure the same animal (number) does not appear in a single column, row, or 3x3 grid"
         raise Exception("lang at Texts should be 'ja' or 'en'!")
 
     @property
