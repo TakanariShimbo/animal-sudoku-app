@@ -4,7 +4,7 @@ README | [English](readme/readme_en.md) | [日本語](readme/readme_jp.md)
 
 これは「Animal Sudoku App」のリポジトリです。
 
-![About WebSite](/images/about_animal_sudoku_app.png)
+![About WebSite](/images/about_animal_sudoku_app_jp.png)
 
 以下の QR コードをクリックまたはスキャンして、ウェブサイトにアクセスしてください。
 
