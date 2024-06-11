@@ -14,6 +14,22 @@ class Texts:
         return self._lang == "en"
 
     @property
+    def column_header(self) -> str:
+        if self.is_jp:
+            return "列"
+        elif self.is_en:
+            return "C"
+        raise Exception("lang at Texts should be 'ja' or 'en'!")
+
+    @property
+    def index_header(self) -> str:
+        if self.is_jp:
+            return "行"
+        elif self.is_en:
+            return "R"
+        raise Exception("lang at Texts should be 'ja' or 'en'!")
+
+    @property
     def title(self) -> str:
         if self.is_jp:
             return "🐧アニマル数独アプリ"

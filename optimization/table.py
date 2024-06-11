@@ -30,7 +30,7 @@ class Table:
         return indexes, columns
 
     @classmethod
-    def _get_indexes_and_columns_for_string(cls, column_header: str = "列", index_header: str = "行") -> tuple[list[str], list[str]]:
+    def _get_indexes_and_columns_for_string(cls, column_header: str, index_header: str) -> tuple[list[str], list[str]]:
         number_indexes, number_columns = cls._get_indexes_and_columns_for_number()
         string_indexes = [f"{index_header}{n}" for n in number_indexes]
         string_columns = [f"{column_header}{n}" for n in number_columns]
@@ -48,9 +48,8 @@ class Table:
         to_number_converter = np.vectorize(string_to_number_dict.get)
         return to_number_converter(string_array)
 
-    @property
-    def string_df(self) -> pd.DataFrame:
-        indexes, columns = self._get_indexes_and_columns_for_string()
+    def get_string_df(self, column_header: str, index_header: str) -> pd.DataFrame:
+        indexes, columns = self._get_indexes_and_columns_for_string(column_header=column_header, index_header=index_header)
 
         return pd.DataFrame(
             data=self._convert_array_to_string(number_array=self._number_array),
@@ -59,8 +58,7 @@ class Table:
             dtype=str,
         )
 
-    @property
-    def number_df(self) -> pd.DataFrame:
+    def get_number_df(self) -> pd.DataFrame:
         indexes, columns = self._get_indexes_and_columns_for_number()
 
         return pd.DataFrame(

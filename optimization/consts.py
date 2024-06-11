@@ -34,7 +34,7 @@ class Consts:
         return list(range(1, 4))
 
     def get_fixed_number(self, h_position: int, v_position: int) -> int | None:
-        val = self._fixed_table.number_df.loc[v_position, h_position]
+        val = self._fixed_table.get_number_df().loc[v_position, h_position]
         if val == 0:
             return None
         else:

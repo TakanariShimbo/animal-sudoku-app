@@ -23,10 +23,10 @@ optimizer = Optimizer(consts=consts, seed=123)
 result_table = optimizer.run()
 
 print("-------- Probrem --------")
-print(fixed_table.number_df)
+print(fixed_table.get_number_df())
 
 print("-------- Solution --------")
 if result_table:
-    print(result_table.number_df)
+    print(result_table.get_number_df())
 else:
     print("Not found")

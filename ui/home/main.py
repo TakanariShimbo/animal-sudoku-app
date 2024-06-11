@@ -50,7 +50,7 @@ def show_home() -> bool:
 
     edited_string_df = st.data_editor(
         key=RerenderSState.get(),
-        data=TableSState.get().string_df,
+        data=TableSState.get().get_string_df(column_header=texts.column_header, index_header=texts.index_header),
         use_container_width=True,
     )
 
@@ -75,7 +75,7 @@ def show_home() -> bool:
         st.image(image=RuleImages.grid_constraint, use_column_width=True)
 
     cell_changed_mode = check_cell_changed_mode(
-        from_string_df=TableSState.get().string_df,
+        from_string_df=TableSState.get().get_string_df(column_header=texts.column_header, index_header=texts.index_header),
         to_string_df=edited_string_df,
     )
 
