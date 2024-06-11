@@ -21,6 +21,35 @@ class Table:
         number_array = cls._convert_array_to_number(string_array=string_array)
         return cls(number_array=number_array)
 
+    def get_string_df(self, column_header: str, index_header: str) -> pd.DataFrame:
+        indexes, columns = self._get_indexes_and_columns_for_string(column_header=column_header, index_header=index_header)
+        return pd.DataFrame(
+            data=self._convert_array_to_string(number_array=self._number_array),
+            index=indexes,
+            columns=columns,
+            dtype=str,
+        )
+
+    def get_number_df(self) -> pd.DataFrame:
+        indexes, columns = self._get_indexes_and_columns_for_number()
+        return pd.DataFrame(
+            data=self._number_array,
+            index=indexes,
+            columns=columns,
+            dtype=int,
+        )
+
+    @property
+    def is_filled(self) -> bool:
+        return self._number_array.min() > 0
+
+    def convert_some_cells_to_zero(self, n_cells_to_zero: int, seed: int) -> None:
+        np.random.seed(seed)
+        idxes = np.arange(self._number_array.size)
+        np.random.shuffle(idxes)
+        target_idxes = idxes[:n_cells_to_zero]
+        np.put(self._number_array, target_idxes, 0)
+
     @staticmethod
     def _get_string_list() -> list[str]:
         return ["", "🐭1", "🐮2", "🐯3", "🐰4", "🐉5", "🐍6", "🐎7", "🐏8", "🐵9"]
@@ -55,36 +84,3 @@ class Table:
     def _convert_array_to_number(cls, string_array: np.ndarray) -> np.ndarray:
         to_number_converter = np.vectorize(cls._get_string_to_number_dict().get)
         return to_number_converter(string_array)
-
-    def get_string_df(self, column_header: str, index_header: str) -> pd.DataFrame:
-        indexes, columns = self._get_indexes_and_columns_for_string(column_header=column_header, index_header=index_header)
-
-        return pd.DataFrame(
-            data=self._convert_array_to_string(number_array=self._number_array),
-            index=indexes,
-            columns=columns,
-            dtype=str,
-        )
-
-    def get_number_df(self) -> pd.DataFrame:
-        indexes, columns = self._get_indexes_and_columns_for_number()
-
-        return pd.DataFrame(
-            data=self._number_array,
-            index=indexes,
-            columns=columns,
-            dtype=int,
-        )
-
-    @property
-    def is_filled(self) -> bool:
-        return self._number_array.min() > 0
-
-    def convert_some_cells_to_zero(self, n_cells_to_zero: int, seed: int) -> None:
-        np.random.seed(seed)
-
-        idxes = np.arange(self._number_array.size)
-        np.random.shuffle(idxes)
-        target_idxes = idxes[:n_cells_to_zero]
-
-        np.put(self._number_array, target_idxes, 0)
