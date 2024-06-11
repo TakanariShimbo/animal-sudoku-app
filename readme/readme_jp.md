@@ -1,3 +1,5 @@
+README | [English](readme/readme_en.md) | [日本語](readme/readme_jp.md)
+
 ## 🐧 概要
 
 これは「Animal Sudoku App」のリポジトリです。
