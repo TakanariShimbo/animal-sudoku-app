@@ -1,6 +1,10 @@
 ## 🐧About
 
-Animal Sudoku App
+This is repository of "Animal Sudoku App"
+
+Link: https://animal-sudoku-app.streamlit.app/
+
+![Website](/images/qr_code_animal_sudoku_app.png)
 
 ## 🐋Docker
 
