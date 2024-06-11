@@ -41,7 +41,7 @@ def show_home() -> bool:
     with left:
         change_problem_popver = st.popover(label=texts.change_problem, use_container_width=True)
     with right:
-        is_change_language_pushed = st.button(label=texts.change_language, use_container_width=True)
+        is_change_lang_pushed = st.button(label=texts.change_lang, use_container_width=True)
 
     with change_problem_popver:
         with st.form(key="change_problem_form", border=False):
@@ -113,7 +113,7 @@ def show_home() -> bool:
         RerenderSState.call()
         return True
 
-    if is_change_language_pushed:
+    if is_change_lang_pushed:
         if texts.is_en:
             TextsSState.set(texts=Texts(lang="jp"))
         elif texts.is_jp:

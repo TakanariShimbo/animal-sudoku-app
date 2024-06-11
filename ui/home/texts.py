@@ -22,7 +22,7 @@ class Texts:
         raise Exception("lang at Texts should be 'ja' or 'en'!")
 
     @property
-    def change_language(self) -> str:
+    def change_lang(self) -> str:
         if self.is_jp:
             return "🗾言語切替"
         elif self.is_en:
