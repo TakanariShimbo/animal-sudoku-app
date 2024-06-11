@@ -2,9 +2,9 @@
 
 This is repository of "Animal Sudoku App"
 
-Link: https://animal-sudoku-app.streamlit.app/
+Click the bellow image to access web site.
 
-![Website](/images/qr_code_animal_sudoku_app.png)
+[![Website](/images/qr_code_animal_sudoku_app.png)](https://animal-sudoku-app.streamlit.app/)
 
 ## 🐋Docker
 
