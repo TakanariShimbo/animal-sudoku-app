@@ -2,22 +2,9 @@ import numpy as np
 import pandas as pd
 
 
-DISPLAYED_STRING_LIST = ["", "🐭1", "🐮2", "🐯3", "🐰4", "🐉5", "🐍6", "🐎7", "🐏8", "🐵9"]
-
-NUMBER_TO_STRING_DICT = {key: val for key, val in enumerate(DISPLAYED_STRING_LIST)}
-STRING_TO_NUMBER_DICT = {val: key for key, val in enumerate(DISPLAYED_STRING_LIST)} | {f"{key}": key for key, val in enumerate(DISPLAYED_STRING_LIST)}
-
-CONVERT_NUMBER_TO_STRING = np.vectorize(NUMBER_TO_STRING_DICT.get)
-CONVERT_STRING_TO_NUMBER = np.vectorize(STRING_TO_NUMBER_DICT.get)
-
-NUMBER_INDEXES = list(range(1, 10))
-NUMBER_COLUMNS = list(range(1, 10))
-
-STRING_INDEXES = [f"行{n}" for n in NUMBER_INDEXES]
-STRING_COLUMNS = [f"列{n}" for n in NUMBER_COLUMNS]
-
-
 class Table:
+    DISPLAYED_STRING_LIST = ["", "🐭1", "🐮2", "🐯3", "🐰4", "🐉5", "🐍6", "🐎7", "🐏8", "🐵9"]
+
     def __init__(self, number_array: np.ndarray) -> None:
         assert number_array.shape == (9, 9)
         assert np.issubdtype(number_array.dtype, np.integer)
@@ -33,24 +20,53 @@ class Table:
     @classmethod
     def from_string_df(cls, string_df: pd.DataFrame) -> "Table":
         string_array = string_df.values
-        number_array = CONVERT_STRING_TO_NUMBER(string_array)
+        number_array = cls._convert_array_to_number(string_array=string_array)
         return cls(number_array=number_array)
+
+    @staticmethod
+    def _get_indexes_and_columns_for_number() -> tuple[list[int], list[int]]:
+        indexes = list(range(1, 10))
+        columns = list(range(1, 10))
+        return indexes, columns
+
+    @classmethod
+    def _get_indexes_and_columns_for_string(cls, column_header: str = "列", index_header: str = "行") -> tuple[list[str], list[str]]:
+        number_indexes, number_columns = cls._get_indexes_and_columns_for_number()
+        string_indexes = [f"{index_header}{n}" for n in number_indexes]
+        string_columns = [f"{column_header}{n}" for n in number_columns]
+        return string_indexes, string_columns
+
+    @classmethod
+    def _convert_array_to_string(cls, number_array: np.ndarray) -> np.ndarray:
+        number_to_string_dict = {key: val for key, val in enumerate(cls.DISPLAYED_STRING_LIST)}
+        to_sring_converter = np.vectorize(number_to_string_dict.get)
+        return to_sring_converter(number_array)
+
+    @classmethod
+    def _convert_array_to_number(cls, string_array: np.ndarray) -> np.ndarray:
+        string_to_number_dict = {val: key for key, val in enumerate(cls.DISPLAYED_STRING_LIST)} | {f"{key}": key for key, val in enumerate(cls.DISPLAYED_STRING_LIST)}
+        to_number_converter = np.vectorize(string_to_number_dict.get)
+        return to_number_converter(string_array)
 
     @property
     def string_df(self) -> pd.DataFrame:
+        indexes, columns = self._get_indexes_and_columns_for_string()
+
         return pd.DataFrame(
-            data=CONVERT_NUMBER_TO_STRING(self._number_array),
-            index=STRING_INDEXES,
-            columns=STRING_COLUMNS,
+            data=self._convert_array_to_string(number_array=self._number_array),
+            index=indexes,
+            columns=columns,
             dtype=str,
         )
 
     @property
     def number_df(self) -> pd.DataFrame:
+        indexes, columns = self._get_indexes_and_columns_for_number()
+
         return pd.DataFrame(
             data=self._number_array,
-            index=NUMBER_INDEXES,
-            columns=NUMBER_COLUMNS,
+            index=indexes,
+            columns=columns,
             dtype=int,
         )
 
