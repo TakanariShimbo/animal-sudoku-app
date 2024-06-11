@@ -1,4 +1,4 @@
-README | [English](readme/readme_en.md) | [日本語](readme/readme_jp.md)
+README | [English](/readme/readme_en.md) | [日本語](/readme/readme_jp.md)
 
 ## 🐧 概要
 
