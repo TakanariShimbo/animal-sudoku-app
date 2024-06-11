@@ -4,5 +4,4 @@ __pycache__
 .dockerignore
 Dockerfile
 docker-compose.yaml
-readme.md
 test_optimization.py
