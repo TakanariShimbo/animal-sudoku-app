@@ -14,17 +14,17 @@ README | [English](/readme/readme_en.md) | [日本語](/readme/readme_jp.md)
 
 - 前提：Docker がインストール済み
 
-### デプロイ
+### サーバーのデプロイ
 
 ```bash
 # 実行前に.envファイルを設定してください。
 docker compose up -d
 ```
 
-### ビルド
+### イメージのビルド
 
 ```bash
-# ユーザー名とタグを正しく変更してください。
+# ユーザー名とタグを適切に変更してください。
 docker build -t takanarishimbo/animal-sudoku-app:v1.0.0 .
 ```
 
@@ -32,30 +32,28 @@ docker build -t takanarishimbo/animal-sudoku-app:v1.0.0 .
 
 - 前提：Anaconda or Miniconda がインストール済み
 
-### デプロイ
-
-```bash
-# 実行前にvenvを有効化してください。
-streamlit run server.py
-```
-
-### Venv
-
-- 仮想環境の作成
+### 仮想環境の作成
 
 ```bash
 conda create -n animal_sudoku_app python=3.10
 ```
 
-- 仮想環境の有効化
+### 仮想環境の有効化
 
 ```bash
 conda activate animal_sudoku_app
 ```
 
-- ライブラリのインストール
+### ライブラリのインストール
 
 ```bash
-# 実行前にvenvを有効化してください。
+# 実行前に仮想環境を有効化してください。
 pip install -r requirements.txt
+```
+
+### サーバーのデプロイ
+
+```bash
+# 実行前に仮想環境を有効化してください。
+streamlit run server.py
 ```
