@@ -19,7 +19,7 @@ fixed_number_array = np.array(
 )
 fixed_table = Table(number_array=fixed_number_array)
 consts = Consts(fixed_table=fixed_table)
-optimizer = Optimizer(consts=consts, seed=123)
+optimizer = Optimizer(table=consts, seed=123)
 result_table = optimizer.run()
 
 print("-------- Probrem --------")

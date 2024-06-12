@@ -1,14 +1,13 @@
 from ortools.sat.python import cp_model
 
 from .table import Table
-from .consts import Consts
 from .variables import Variables
 from .constraints import add_constraints
 from .solution_callback import SolutionCallback
 
 
 class Optimizer:
-    def __init__(self, consts: Consts, seed: int = 123) -> None:
+    def __init__(self, table: Table, seed: int = 123) -> None:
         # モデルの作成
         model = cp_model.CpModel()
 
@@ -21,14 +20,14 @@ class Optimizer:
 
         self._model = model
         self._solver = solver
-        self._consts = consts
+        self._table = table
 
     def run(self) -> Table | None:
-        variables = Variables(model=self._model, consts=self._consts)
+        variables = Variables(model=self._model)
 
-        add_constraints(model=self._model, consts=self._consts, variables=variables)
+        add_constraints(model=self._model, table=self._table, variables=variables)
 
-        solution_callback = SolutionCallback(consts=self._consts, variables=variables)
+        solution_callback = SolutionCallback(variables=variables)
         status = self._solver.solve(model=self._model, solution_callback=solution_callback)
         has_solution = status == cp_model.OPTIMAL or status == cp_model.FEASIBLE
         # self._print_statistics()
