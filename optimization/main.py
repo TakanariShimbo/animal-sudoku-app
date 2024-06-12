@@ -9,12 +9,9 @@ from .solution_callback import SolutionCallback
 
 class Optimizer:
     def __init__(self, consts: Consts, seed: int = 123) -> None:
-        # モデルの作成
         model = cp_model.CpModel()
-
-        # ソルバーの作成
+        
         solver = cp_model.CpSolver()
-
         solver.parameters.random_seed = seed
         solver.parameters.enumerate_all_solutions = False
         solver.parameters.linearization_level = 0
