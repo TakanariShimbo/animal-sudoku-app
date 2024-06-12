@@ -1,9 +1,9 @@
 import numpy as np
 
-from optimization import Optimizer, Consts, Table
+from optimization import Optimizer, Table
 
 
-fixed_number_array = np.array(
+init_number_array = np.array(
     [
         [0, 8, 0, 4, 0, 0, 0, 9, 0],
         [0, 6, 0, 0, 0, 0, 1, 3, 0],
@@ -17,13 +17,12 @@ fixed_number_array = np.array(
     ],
     dtype=int,
 )
-fixed_table = Table(number_array=fixed_number_array)
-consts = Consts(fixed_table=fixed_table)
-optimizer = Optimizer(table=consts, seed=123)
+init_table = Table(number_array=init_number_array)
+optimizer = Optimizer(table=init_table, seed=123)
 result_table = optimizer.run()
 
 print("-------- Probrem --------")
-print(fixed_table.get_number_df())
+print(init_table.get_number_df())
 
 print("-------- Solution --------")
 if result_table:
