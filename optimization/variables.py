@@ -14,7 +14,7 @@ class Variables:
             for v_position in TABLE_CONFIG.v_positions:
                 for number in TABLE_CONFIG.numbers:
                     key = (h_position, v_position, number)
-                    val = model.new_bool_var("IsAssignedVar_Hpos%i_Vpos%i_Num%i" % (h_position, v_position, number))
+                    val = model.new_bool_var(f"IsAssignedVar_Hpos{h_position}_Vpos{v_position}_Num{number}")
                     is_assigned_var_dict[key] = val
 
         return is_assigned_var_dict
