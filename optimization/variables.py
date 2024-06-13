@@ -1,6 +1,6 @@
 from ortools.sat.python import cp_model
 
-from .table import Table, TABLE_CONFIG
+from .table import TABLE_CONFIG
 
 
 class Variables:
